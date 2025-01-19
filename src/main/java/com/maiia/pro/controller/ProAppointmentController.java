@@ -1,5 +1,6 @@
 package com.maiia.pro.controller;
 
+import com.maiia.pro.dto.AppointmentDTO;
 import com.maiia.pro.entity.Appointment;
 import com.maiia.pro.service.ProAppointmentService;
 import io.swagger.annotations.ApiOperation;
@@ -26,5 +27,11 @@ public class ProAppointmentController {
     @GetMapping
     public List<Appointment> getAppointments() {
         return proAppointmentService.findAll();
+    }
+
+    @ApiOperation(value = "Create a new appointment")
+    @PostMapping
+    public Appointment createAppointment(@RequestBody final AppointmentDTO appointmentDTO) {
+        return proAppointmentService.createAppointment(appointmentDTO);
     }
 }

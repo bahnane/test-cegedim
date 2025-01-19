@@ -1,6 +1,8 @@
 package com.maiia.pro.service;
 
+import com.maiia.pro.dto.AppointmentDTO;
 import com.maiia.pro.entity.Appointment;
+import com.maiia.pro.mapper.AppointmentMapper;
 import com.maiia.pro.repository.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,5 +24,9 @@ public class ProAppointmentService {
 
     public List<Appointment> findByPractitionerId(Integer practitionerId) {
         return appointmentRepository.findByPractitionerId(practitionerId);
+    }
+
+    public Appointment createAppointment(AppointmentDTO appointmentDTO) {
+        return appointmentRepository.save(AppointmentMapper.toAppointmentEntityFrom(appointmentDTO));
     }
 }
