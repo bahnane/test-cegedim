@@ -2,7 +2,7 @@ package com.maiia.pro.service;
 
 import com.maiia.pro.entity.Appointment;
 import com.maiia.pro.entity.Availability;
-import com.maiia.pro.mapper.AvailabilityMapper;
+import com.maiia.pro.helper.AvailabilityHelper;
 import com.maiia.pro.repository.AppointmentRepository;
 import com.maiia.pro.repository.AvailabilityRepository;
 import com.maiia.pro.repository.TimeSlotRepository;
@@ -32,7 +32,7 @@ public class ProAvailabilityService {
     public List<Availability> generateAvailabilities(Integer practitionerId) {
         List<Appointment> appointments = this.appointmentRepository.findByPractitionerId(practitionerId);
         return this.timeSlotRepository.findByPractitionerId(practitionerId).stream()
-                                      .map((timeSlot) -> AvailabilityMapper.toAvailabilitiesFrom(timeSlot,
+                                      .map((timeSlot) -> AvailabilityHelper.toAvailabilitiesFrom(timeSlot, appointments,
                                               practitionerId))
                                       .flatMap(Collection::stream)
                                       .filter((availability) -> this.isAvailabilityValid(appointments, availability))
@@ -48,7 +48,7 @@ public class ProAvailabilityService {
                 appointment));
     }
 
-    private boolean isAppointmentAlreadyBooked(Availability availability, Appointment appointment) {
+    private static boolean isAppointmentAlreadyBooked(Availability availability, Appointment appointment) {
         return appointment.getStartDate().isEqual(
                 availability.getStartDate()) && appointment.getEndDate().isEqual(availability.getEndDate());
     }
