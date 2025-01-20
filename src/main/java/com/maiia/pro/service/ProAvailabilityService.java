@@ -35,21 +35,10 @@ public class ProAvailabilityService {
                                       .map((timeSlot) -> AvailabilityHelper.toAvailabilitiesFrom(timeSlot, appointments,
                                               practitionerId))
                                       .flatMap(Collection::stream)
-                                      .filter((availability) -> this.isAvailabilityValid(appointments, availability))
                                       .collect(Collectors.toList());
     }
 
     public void saveAvailabilities(List<Availability> availabilities) {
         this.availabilityRepository.saveAll(availabilities);
-    }
-
-    private boolean isAvailabilityValid(List<Appointment> appointments, Availability availability) {
-        return appointments.stream().noneMatch((appointment) -> isAppointmentAlreadyBooked(availability,
-                appointment));
-    }
-
-    private static boolean isAppointmentAlreadyBooked(Availability availability, Appointment appointment) {
-        return appointment.getStartDate().isEqual(
-                availability.getStartDate()) && appointment.getEndDate().isEqual(availability.getEndDate());
     }
 }
